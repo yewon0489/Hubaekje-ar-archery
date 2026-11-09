@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>현무랑 후백제 산책 // AR 양궁 미션</title>
+
+<!-- 핵심 에셋 프리로드 (화면 전환 깜빡임 방지) -->
+<link rel="preload" as="image" href="assets/bg/bg_intro.png">
+<link rel="preload" as="image" href="assets/bg/bg_loading.png">
+<link rel="preload" as="image" href="assets/bg/bg_archery.png">
+<link rel="preload" as="image" href="assets/ui/logo.png">
+<link rel="preload" as="image" href="assets/char/char_1.png">
+
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Three.js (Local with CDN fallback) -->
+<script src="three.min.js"></script>
+<script>
+if (typeof THREE === 'undefined') {
+  document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');
+}
+</script>
+</head>
+<body>
+
+<!-- ── 1. LOGIN / INTRO SCREEN (배경_인트로 + 로고 + 현무랑_1) ── -->
+<section class="view-screen active" id="view-login">
+  <div class="intro-logo-wrap">
+    <img src="assets/ui/logo.png" class="intro-logo-img" alt="현무랑 후백제 산책">
+  </div>
+
+  <div class="char-stage-wrap" data-char-stage="login">
+    <div class="char-speech-bubble" id="login-bubble">
+      안녕! 나를 톡톡 터치하면 견훤 대왕님과 후백제 비밀 이야기를 들려줄게!
+    </div>
+    <img src="assets/char/char_1.png" class="char-img-3d" alt="현무랑 환영">
+  </div>
+
+  <div class="wood-panel-card">
+    <div class="login-input-group">
+      <label class="login-label" for="input-username">🐢 산책 대원 이름</label>
+      <input type="text" id="input-username" class="login-input" placeholder="이름을 입력하세요" value="현무랑친구" autocomplete="off" spellcheck="false">
+    </div>
+
+    <button class="btn-primary" id="btn-login-start">
+      현무랑과 산책 출발! ➔
+    </button>
+  </div>
+  <div style="font-size: 10px; color: rgba(74, 50, 25, 0.45); margin-top: 4px;">Build v2026.11.09-r6 (표적판 -20% & 아이폰 자이로 안정화)</div>
+</section>
+
+<!-- ── 2. LOADING SCREEN WITH TMI (정확한 5초 로딩) ── -->
+<section class="view-screen" id="view-loading">
+  <div class="loading-top-badge">
+    <img src="assets/ui/hourglass.png" class="hourglass-icon" alt="로딩 모래시계">
+    <span style="font-family: var(--font-title); font-size: 16px; color: var(--wood-dark);">
+      서기 900년 후백제 완산주로 이동 중...
+    </span>
+  </div>
+
+  <div class="char-stage-wrap" data-char-stage="loading">
+    <div class="char-speech-bubble">
+      나를 터치해봐! 후백제와 견훤 대왕님의 놀라운 사실을 알려줄게!
+    </div>
+    <img src="assets/char/char_2.png" class="char-img-3d" alt="현무랑 로딩">
+  </div>
+
+  <div class="wood-panel-card">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="loading-bar"></div>
+    </div>
+
+    <div class="tmi-header-row">
+      <div class="tmi-tag">📜 견훤 대왕 & 후백제 역사 백과</div>
+      <button class="tmi-next-btn" id="btn-next-tmi">다른 이야기 ↻</button>
+    </div>
+    <div class="tmi-text" id="tmi-content">
+      서기 900년 견훤 대왕님은 전주(완산주)에 입성해 후백제를 세웠어요. 백제의 옛 영광을 되찾겠다는 선언에 백성들이 성문 밖까지 나와 환영했답니다!
+    </div>
+  </div>
+</section>
+
+<!-- ── 3. VIDEO SCREEN (배경_영화관 + 숏폼 수정.mp4 + 현무랑_3) ── -->
+<section class="view-screen" id="view-video">
+  <div class="cinema-layout">
+    <div class="cinema-top-bar">
+      <div class="cinema-badge">🎬 후백제 역사 시네마</div>
+      <button class="video-skip-btn" id="btn-skip-video">건너뛰기 ⏩</button>
+    </div>
+
+    <div class="cinema-screen-frame">
+      <video id="intro-video" src="assets/video/intro.mp4" playsinline webkit-playsinline></video>
+      <button class="video-sound-btn" id="btn-toggle-sound">🔊 소리 켜기/끄기</button>
+    </div>
+
+    <div class="cinema-audience-char" data-char-stage="cinema">
+      <div class="char-speech-bubble" style="font-size: 19px; padding: 5px 14px; margin-bottom: 6px;">
+        팝콘 냠냠~ 나를 터치하면 시네마 역사 팁도 알려줘!
+      </div>
+      <img src="assets/char/char_3.png" class="char-img-3d" alt="현무랑 팝콘 관람">
+    </div>
+  </div>
+</section>
+
+<!-- ── 4. BRIEFING SCREEN (배경_양궁장 + 현무랑_4) ── -->
+<section class="view-screen" id="view-briefing">
+  <div class="loading-top-badge">
+    <span style="font-family: var(--font-title); font-size: 17px; color: var(--wood-dark);">
+      🏹 동고산성 신궁 미션 안내
+    </span>
+  </div>
+
+  <div class="char-stage-wrap" data-char-stage="briefing">
+    <div class="char-speech-bubble">
+      신궁이라 불렸던 견훤 대왕님처럼 5개 과녁을 맞혀볼까? (터치해봐!)
+    </div>
+    <img src="assets/char/char_4.png" class="char-img-3d" alt="현무랑 궁수">
+  </div>
+
+  <div class="wood-panel-card">
+    <div class="briefing-guide-box">
+      🎯 <b>좌우 과녁 탐색 및 조준 안내</b><br>
+      • <b>좌우 둘러보기</b>: 휴대폰을 <b>왼쪽, 정면, 오른쪽</b>으로 둘러보며 숨겨진 5개 관문을 찾아내세요!<br>
+      • <b>과녁 전신 쓰러짐</b>: 화살을 당겨 장력을 모은 뒤 명중시키면 과녁이 통째로 쿵 쓰러집니다!<br>
+      • <b>방향 나침반</b>: 상단 현무랑이 <b>가장 가까운 관문의 방향</b>을 실시간으로 알려줍니다.
+    </div>
+
+    <button class="btn-primary" id="btn-start-game">
+      🏹 AR 활터 입장하기 (과녁 조준 시작)
+    </button>
+  </div>
+</section>
+
+<!-- ── 5. AR ARCHERY GAME SCREEN (원본 2D 활 & 과녁 전신 쓰러짐) ── -->
+<section class="view-screen" id="view-game">
+  <video id="ar-video" playsinline webkit-playsinline muted autoplay></video>
+  <canvas id="canvas-3d"></canvas>
+  <canvas id="hud-canvas"></canvas>
+
+  <div class="ar-top-hud">
+    <div class="hud-chip highlight">🏹 화살: <span id="hud-arrows">15</span></div>
+    <div class="hud-chip">🎯 격파: <span id="hud-cleared">0</span> / 5</div>
+  </div>
+
+  <!-- 상단 고정 과녁 네비게이터 -->
+  <div class="ar-navigator-bar" id="ar-nav-bar">
+    <img id="ar-partner-img" src="assets/char/char_5.png" alt="현무랑 레이더">
+    <div class="ar-nav-info">
+      <div class="ar-nav-direction" id="ar-nav-dir">🧭 주변의 과녁을 조준 중...</div>
+      <div class="ar-nav-sub" id="ar-nav-sub">휴대폰을 좌우로 천천히 둘러보며 조준하세요!</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 6. RESULT SCREEN (배경_인벤 + 획득뱃지 + 파티클_뱃지획득 + 현무랑_1) ── -->
+<section class="view-screen" id="view-result">
+  <div class="loading-top-badge">
+    <span style="font-family: var(--font-title); font-size: 18px; color: var(--wood-dark);">
+      🎉 미션 클리어! 동고산성 뱃지 획득!
+    </span>
+  </div>
+
+  <div class="badge-reward-stage">
+    <img src="assets/ui/particle_badge.png" class="badge-particle-bg" alt="파티클">
+    <img id="res-badge-img" src="assets/ui/badge_unlocked.png" class="badge-img-display" alt="동고산성 획득 뱃지">
+  </div>
+
+  <div class="char-stage-wrap" data-char-stage="result" style="margin: 0;">
+    <div class="char-speech-bubble" style="font-size: 20px;">
+      견훤 대왕님도 감탄하실 명궁이야!! 동고산성 수호 뱃지를 획득했어!
+    </div>
+    <img src="assets/char/char_1.png" class="char-img-3d" style="width: 115px; height: 115px;" alt="현무랑 축하">
+  </div>
+
+  <div class="wood-panel-card" style="gap: 8px; padding: 14px 18px;">
+    <button class="btn-primary" id="btn-open-inventory">
+      🎒 내 뱃지 도감(인벤토리) 확인하기
+    </button>
+    <button class="btn-ghost" id="btn-play-again">
+      🔄 새로운 배치로 다시 쏘기
+    </button>
+  </div>
+</section>
+
+<!-- ── 7. INVENTORY SCREEN (배경_인벤 + 4종 뱃지 도감 + 유적지별 견훤 역사 설명) ── -->
+<section class="view-screen" id="view-inventory">
+  <div class="inv-header">
+    <div class="inv-title">🎒 현무랑의 후백제 뱃지 도감</div>
+    <button class="btn-secondary" id="btn-inv-back">
+      처음으로
+    </button>
+  </div>
+
+  <div class="badge-grid">
+    <div class="badge-slot unlocked" data-spot-info="🏯 [동고산성] 서기 900년 견훤 대왕이 완산주 도읍을 지키기 위해 축조한 후백제의 핵심 왕궁 산성이에요! '전주성' 명문 기와가 출토된 역사 현장입니다.">
+      <img src="assets/ui/particle_inven.png" class="badge-slot-sparkle" alt="반짝임">
+      <img src="assets/ui/badge_unlocked.png" class="slot-badge-img" alt="동고산성 뱃지">
+      <div class="badge-slot-name">동고산성</div>
+      <div class="badge-slot-status" style="color: var(--green-dark);">✅ 획득 완료 (터치해설)</div>
+    </div>
+
+    <div class="badge-slot" data-spot-info="💧 [낙수정] 동고산성 서쪽 기슭에 자리한 옛 약수터이자 마을로, 후백제 군사들과 백성들이 마시던 맑은 물줄기가 흐르던 유적지입니다.">
+      <img src="assets/ui/badge_lock_naksujeong.png" class="slot-badge-img" alt="낙수정 잠김">
+      <div class="badge-slot-name">낙수정</div>
+      <div class="badge-slot-status">🔒 미개방 (터치해설)</div>
+    </div>
+
+    <div class="badge-slot" data-spot-info="🔔 [동고사] 견훤 대왕이 후백제 도읍 완산주의 안녕과 국태민안을 기원하며 동고산성 자락에 창건한 유서 깊은 천년 고찰입니다.">
+      <img src="assets/ui/badge_lock_donggosa.png" class="slot-badge-img" alt="동고사 잠김">
+      <div class="badge-slot-name">동고사</div>
+      <div class="badge-slot-status">🔒 미개방 (터치해설)</div>
+    </div>
+
+    <div class="badge-slot" data-spot-info="⛰️ [완산칠봉] 견훤 대왕이 완산주에 도읍을 정할 때 남쪽 방어선으로 삼았던 일곱 봉우리로, 전주(완산)라는 지명의 유래가 된 상징적인 산입니다.">
+      <img src="assets/ui/badge_lock_wansan.png" class="slot-badge-img" alt="완산칠봉 잠김">
+      <div class="badge-slot-name">완산칠봉</div>
+      <div class="badge-slot-status">🔒 미개방 (터치해설)</div>
+    </div>
+  </div>
+
+  <div class="char-stage-wrap" data-char-stage="inventory" style="flex-direction: row; gap: 10px; background: var(--cream-bg); border: 3px solid var(--wood-border); border-radius: 22px; padding: 10px 14px; width: 100%; max-width: 390px;">
+    <img src="assets/char/char_5.png" class="char-img-3d" style="width: 72px; height: 72px;" alt="현무랑 미소">
+    <div id="inv-history-desc" style="text-align: left; font-size: 12.5px; line-height: 1.5; color: var(--text-dark);">
+      <b>💡 뱃지를 터치해보세요!</b><br>
+      동고산성·낙수정·동고사·완산칠봉에 담긴 견훤 대왕님의 후백제 역사를 현무랑이 설명해 드려요!
+    </div>
+  </div>
+</section>
+
+<div class="toast-msg" id="toast"></div>
+
+<!-- Modular Role-based Game Scripts -->
+<script src="js/audio.js"></script>
+<script src="js/sensor.js"></script>
+<script src="js/character3d.js"></script>
+<script src="js/targets.js"></script>
+<script src="js/bow.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
