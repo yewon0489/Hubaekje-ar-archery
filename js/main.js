@@ -1,12 +1,7 @@
-/* ─────────────────────────────────────────────────────────────
-   MAIN GAME ENGINE & TARGET NAVIGATOR (THREE.JS AR ARCHERY)
-   현무랑 후백제 산책 AR 양궁 메인 컨트롤러
-   - iOS Safari (아이폰) 완벽 호환: 동기적 센서 권한 요청 + play() 명시 호출
-   - 원본 친숙한 2D 클레이 활/화살 UI 100% 복원
-   - 과녁 명중 시 통째로 뒤로 쿵 쓰러지는 전신 넘어짐 물리 연출 (Knockdown)
-   - 좌우 둘러보기 시야각 (Yaw -75° ~ +75°: 왼쪽, 정면, 오른쪽을 둘러보며 탐색)
-   - 정확한 5초 로딩 (화면 전환 깜빡임 원천 차단)
-───────────────────────────────────────────────────────────── */
+/**
+ * Main Game Controller
+ * Manages game state machine, Three.js AR rendering loop, and target navigation HUD.
+ */
 
 const STAGES = {
   LOGIN: 'view-login',
@@ -18,7 +13,7 @@ const STAGES = {
   INVENTORY: 'view-inventory'
 };
 
-/* ── 0. 모든 핵심 배경/UI 에셋 사전 디코딩 (화면 전환 지연 방지) ── */
+// Preload critical assets to prevent frame drops during transitions
 const CRITICAL_ASSETS = [
   'assets/bg/bg_intro.png',
   'assets/bg/bg_loading.png',
@@ -32,7 +27,9 @@ const CRITICAL_ASSETS = [
   'assets/char/char_5.png',
   'assets/ui/logo.png',
   'assets/ui/target.png',
-  'assets/ui/badge_unlocked.png'
+  'assets/ui/badge_unlocked.png',
+  'assets/ui/badge_lock_donggosanseong.png',
+  'assets/ui/badge_lock_jungbawi.png'
 ];
 
 function preloadCriticalAssets() {
@@ -46,7 +43,7 @@ function preloadCriticalAssets() {
 }
 preloadCriticalAssets();
 
-// 글자 입력(가상 키보드/IME) 시 화면 흔들림 방지
+// Maintain stable viewport height during virtual keyboard activation
 let lockedAppHeight = window.innerHeight;
 function lockViewportHeight() {
   const activeEl = document.activeElement;
@@ -61,7 +58,7 @@ lockViewportHeight();
 
 setupInteractiveCharacters();
 
-// 인벤토리 4대 유적지 터치 시 견훤/후백제 역사 해설 표시
+// Bind historical description modal events to inventory slots
 document.querySelectorAll('.badge-slot[data-spot-info]').forEach(slot => {
   slot.addEventListener('click', () => {
     const info = slot.getAttribute('data-spot-info');
@@ -98,7 +95,7 @@ function showToast(text) {
   setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-/* ── STAGE 1: LOGIN ────────────────────────────────────────── */
+// Stage 1: Login & Onboarding
 const usernameInput = document.getElementById('input-username');
 const loginBubble = document.getElementById('login-bubble');
 
@@ -121,14 +118,14 @@ if (btnLoginStart) {
   });
 }
 
-/* ── STAGE 2: LOADING (정확한 5.0초 고정 타이머) ──── */
+// Stage 2: Loading & Historical Trivia Buffer
 const TMI_LIST = [
   "서기 900년 견훤 대왕님은 완산주(현재의 전주)에 도읍을 정하고 '백제 의자왕의 숙원을 풀겠다'며 후백제를 건국했어요!",
   "견훤 대왕님은 신라 서남해안을 지키던 비장 출신으로, 늘 군사들 맨 앞에서 활을 쏘며 사기를 북돋운 명궁(神弓)이었습니다.",
   "삼국유사와 삼국사기에는 아기였던 견훤이 숲속에서 호랑이의 젖을 먹고 자라 남다른 용력과 기상을 지녔다는 설화가 전해져요!",
   "전주 동고산성 발굴 조사에서는 후백제 왕궁을 증명하는 '전주성(全州城)' 명문 기와와 대형 건물터가 실제로 출토되었어요!",
   "후백제는 중국(오월·후당), 거란, 일본과 활발히 교류하며 당대 후삼국 중 가장 비옥한 영토와 최강의 군사력을 자랑했습니다.",
-  "견훤 대왕님이 창건한 '동고사', 군사들이 물을 마시던 '낙수정', 남쪽 방어선 '완산칠봉'은 모두 전주에 살아 숨 쉬는 후백제 유적이에요!"
+  "견훤 대왕님이 창건한 '동고사', 군사들이 물을 마시던 '낙수정', 도읍을 굽어살피던 '중바위'는 모두 전주에 살아 숨 쉬는 후백제 유적이에요!"
 ];
 
 let currentTmiIdx = 0;
@@ -175,7 +172,7 @@ function startLoadingStage() {
   requestAnimationFrame(updateLoadingBar);
 }
 
-/* ── STAGE 3: VIDEO ────────────────────────────────────────── */
+// Stage 3: Video Prologue
 const introVideo = document.getElementById('intro-video');
 const btnToggleSound = document.getElementById('btn-toggle-sound');
 
@@ -211,7 +208,7 @@ if (btnSkipVideo && introVideo) {
   });
 }
 
-/* ── STAGE 4: BRIEFING (iOS Safari 최적화 터치 진입점) ──────── */
+// Stage 4: Mission Briefing
 const btnStartGame = document.getElementById('btn-start-game');
 if (btnStartGame) {
   btnStartGame.addEventListener('click', () => {
@@ -228,7 +225,7 @@ if (btnStartGame) {
   });
 }
 
-/* ── STAGE 6 & 7: RESULT & INVENTORY ──────────────────────── */
+// Stage 6 & 7: Results and Inventory Showcase
 const btnOpenInventory = document.getElementById('btn-open-inventory');
 if (btnOpenInventory) {
   btnOpenInventory.addEventListener('click', () => setStage(STAGES.INVENTORY));
@@ -245,9 +242,7 @@ if (btnPlayAgain) {
   });
 }
 
-/* ─────────────────────────────────────────────────────────────
-   THREE.JS 3D SCENE & TARGETS
-───────────────────────────────────────────────────────────── */
+// 3D Scene Initialization & Target Setup
 let scene, camera, renderer, ambientParticles;
 const canvas3d = document.getElementById('canvas-3d');
 const hudCanvas = document.getElementById('hud-canvas');

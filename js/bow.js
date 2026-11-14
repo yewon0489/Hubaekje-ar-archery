@@ -1,8 +1,7 @@
-/* ─────────────────────────────────────────────────────────────
-   AUTHENTIC 2D CLAY RECURVE BOW & ARROW (원본 친숙한 화살 UI 복원)
-   - 따뜻한 갈색 활채, 빨강/흰색 줌통 가죽 밴드, 둥근 회색 돌촉, 둥근 빨간 깃
-   - 손가락 터치 드래그에 반응하는 부드러운 활시위와 텐션 게이지
-───────────────────────────────────────────────────────────── */
+/**
+ * First-person Bow & Arrow UI Renderer
+ * Handles procedural 2D canvas drawing, tension mechanics, and draw animations.
+ */
 const MAX_PULL_Y = 145;
 const MAX_PULL_X = 120;
 

@@ -1,8 +1,7 @@
-/* ─────────────────────────────────────────────────────────────
-   3D TARGETS - WIDE NATURAL EXPLORATION & FULL KNOCKDOWN PHYSICS
-   - 좌우 둘러보기 시야각 (Yaw -75° ~ +75°: 왼쪽, 정면, 오른쪽을 둘러보며 탐색)
-   - 과녁 명중 시 전체 넘어짐 물리 (뒤쪽 받침대까지 한 몸으로 시원하게 쿵 쓰러짐)
-───────────────────────────────────────────────────────────── */
+/**
+ * 3D Target Field & Physics Controller
+ * Configures panoramic gate targets and physics-based knockdown animations.
+ */
 
 const GATE_TEMPLATES = [
   { id: 1, name: '1관문 (동문 평지성)', baseYaw: -75, basePitch: 4.5 },
@@ -12,7 +11,7 @@ const GATE_TEMPLATES = [
   { id: 5, name: '5관문 (견훤 결전 과녁)', baseYaw:  75, basePitch: 4.5 }
 ];
 
-// 사람이 왼쪽, 정면, 오른쪽을 자연스럽게 돌아보며 과녁을 찾는 최적 배치
+// Generates target spatial configurations within panoramic field-of-view
 function generateRandomTargetConfigs() {
   const shuffledSlots = [...GATE_TEMPLATES].sort(() => Math.random() - 0.5);
 

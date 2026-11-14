@@ -1,7 +1,7 @@
-/* ─────────────────────────────────────────────────────────────
-   SPATIAL AUDIO CONTROLLER (Web Audio 3D Sound)
-   후백제 신궁 입체 음향 시스템
-───────────────────────────────────────────────────────────── */
+/**
+ * Spatial Audio Controller
+ * Manages Web Audio API sound synthesis and stereo panning for archery feedback.
+ */
 class SoundController {
   constructor() {
     this.ctx = null;

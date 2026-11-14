@@ -8,7 +8,7 @@
 <meta http-equiv="Expires" content="0">
 <title>현무랑 후백제 산책 // AR 양궁 미션</title>
 
-<!-- 핵심 에셋 프리로드 (화면 전환 깜빡임 방지) -->
+<!-- Asset Preload -->
 <link rel="preload" as="image" href="assets/bg/bg_intro.png">
 <link rel="preload" as="image" href="assets/bg/bg_loading.png">
 <link rel="preload" as="image" href="assets/bg/bg_archery.png">
@@ -27,7 +27,7 @@ if (typeof THREE === 'undefined') {
 </head>
 <body>
 
-<!-- ── 1. LOGIN / INTRO SCREEN (배경_인트로 + 로고 + 현무랑_1) ── -->
+<!-- 1. Login View -->
 <section class="view-screen active" id="view-login">
   <div class="intro-logo-wrap">
     <img src="assets/ui/logo.png" class="intro-logo-img" alt="현무랑 후백제 산책">
@@ -53,7 +53,7 @@ if (typeof THREE === 'undefined') {
   <div style="font-size: 10px; color: rgba(74, 50, 25, 0.45); margin-top: 4px;">Build v2026.11.09-r6 (표적판 -20% & 아이폰 자이로 안정화)</div>
 </section>
 
-<!-- ── 2. LOADING SCREEN WITH TMI (정확한 5초 로딩) ── -->
+<!-- 2. Loading View -->
 <section class="view-screen" id="view-loading">
   <div class="loading-top-badge">
     <img src="assets/ui/hourglass.png" class="hourglass-icon" alt="로딩 모래시계">
@@ -84,7 +84,7 @@ if (typeof THREE === 'undefined') {
   </div>
 </section>
 
-<!-- ── 3. VIDEO SCREEN (배경_영화관 + 숏폼 수정.mp4 + 현무랑_3) ── -->
+<!-- 3. Video Prologue View -->
 <section class="view-screen" id="view-video">
   <div class="cinema-layout">
     <div class="cinema-top-bar">
@@ -106,11 +106,11 @@ if (typeof THREE === 'undefined') {
   </div>
 </section>
 
-<!-- ── 4. BRIEFING SCREEN (배경_양궁장 + 현무랑_4) ── -->
+<!-- 4. Mission Briefing View -->
 <section class="view-screen" id="view-briefing">
   <div class="loading-top-badge">
     <span style="font-family: var(--font-title); font-size: 17px; color: var(--wood-dark);">
-      🏹 동고산성 신궁 미션 안내
+      🏹 낙수정 신궁 미션 안내
     </span>
   </div>
 
@@ -135,7 +135,7 @@ if (typeof THREE === 'undefined') {
   </div>
 </section>
 
-<!-- ── 5. AR ARCHERY GAME SCREEN (원본 2D 활 & 과녁 전신 쓰러짐) ── -->
+<!-- 5. AR Archery Game View -->
 <section class="view-screen" id="view-game">
   <video id="ar-video" playsinline webkit-playsinline muted autoplay></video>
   <canvas id="canvas-3d"></canvas>
@@ -146,7 +146,7 @@ if (typeof THREE === 'undefined') {
     <div class="hud-chip">🎯 격파: <span id="hud-cleared">0</span> / 5</div>
   </div>
 
-  <!-- 상단 고정 과녁 네비게이터 -->
+  <!-- Target Navigator HUD -->
   <div class="ar-navigator-bar" id="ar-nav-bar">
     <img id="ar-partner-img" src="assets/char/char_5.png" alt="현무랑 레이더">
     <div class="ar-nav-info">
@@ -156,22 +156,22 @@ if (typeof THREE === 'undefined') {
   </div>
 </section>
 
-<!-- ── 6. RESULT SCREEN (배경_인벤 + 획득뱃지 + 파티클_뱃지획득 + 현무랑_1) ── -->
+<!-- 6. Mission Result View -->
 <section class="view-screen" id="view-result">
   <div class="loading-top-badge">
     <span style="font-family: var(--font-title); font-size: 18px; color: var(--wood-dark);">
-      🎉 미션 클리어! 동고산성 뱃지 획득!
+      🎉 미션 클리어! 낙수정 뱃지 획득!
     </span>
   </div>
 
   <div class="badge-reward-stage">
     <img src="assets/ui/particle_badge.png" class="badge-particle-bg" alt="파티클">
-    <img id="res-badge-img" src="assets/ui/badge_unlocked.png" class="badge-img-display" alt="동고산성 획득 뱃지">
+    <img id="res-badge-img" src="assets/ui/badge_unlocked.png" class="badge-img-display" alt="낙수정 획득 뱃지">
   </div>
 
   <div class="char-stage-wrap" data-char-stage="result" style="margin: 0;">
     <div class="char-speech-bubble" style="font-size: 20px;">
-      견훤 대왕님도 감탄하실 명궁이야!! 동고산성 수호 뱃지를 획득했어!
+      견훤 대왕님도 감탄하실 명궁이야!! 낙수정 수호 뱃지를 획득했어!
     </div>
     <img src="assets/char/char_1.png" class="char-img-3d" style="width: 115px; height: 115px;" alt="현무랑 축하">
   </div>
@@ -186,7 +186,7 @@ if (typeof THREE === 'undefined') {
   </div>
 </section>
 
-<!-- ── 7. INVENTORY SCREEN (배경_인벤 + 4종 뱃지 도감 + 유적지별 견훤 역사 설명) ── -->
+<!-- 7. Badge Inventory View -->
 <section class="view-screen" id="view-inventory">
   <div class="inv-header">
     <div class="inv-title">🎒 현무랑의 후백제 뱃지 도감</div>
@@ -196,16 +196,22 @@ if (typeof THREE === 'undefined') {
   </div>
 
   <div class="badge-grid">
-    <div class="badge-slot unlocked" data-spot-info="🏯 [동고산성] 서기 900년 견훤 대왕이 완산주 도읍을 지키기 위해 축조한 후백제의 핵심 왕궁 산성이에요! '전주성' 명문 기와가 출토된 역사 현장입니다.">
+    <div class="badge-slot unlocked" data-spot-info="💧 [낙수정] 동고산성 서쪽 기슭에 자리한 옛 약수터이자 마을로, 후백제 군사들과 백성들이 마시던 맑은 물줄기가 흐르던 유적지입니다.">
       <img src="assets/ui/particle_inven.png" class="badge-slot-sparkle" alt="반짝임">
-      <img src="assets/ui/badge_unlocked.png" class="slot-badge-img" alt="동고산성 뱃지">
-      <div class="badge-slot-name">동고산성</div>
+      <img src="assets/ui/badge_unlocked.png" class="slot-badge-img" alt="낙수정 뱃지">
+      <div class="badge-slot-name">낙수정</div>
       <div class="badge-slot-status" style="color: var(--green-dark);">✅ 획득 완료 (터치해설)</div>
     </div>
 
-    <div class="badge-slot" data-spot-info="💧 [낙수정] 동고산성 서쪽 기슭에 자리한 옛 약수터이자 마을로, 후백제 군사들과 백성들이 마시던 맑은 물줄기가 흐르던 유적지입니다.">
-      <img src="assets/ui/badge_lock_naksujeong.png" class="slot-badge-img" alt="낙수정 잠김">
-      <div class="badge-slot-name">낙수정</div>
+    <div class="badge-slot" data-spot-info="🏯 [동고산성] 서기 900년 견훤 대왕이 완산주 도읍을 지키기 위해 축조한 후백제의 핵심 왕궁 산성이에요! '전주성' 명문 기와가 출토된 역사 현장입니다.">
+      <img src="assets/ui/badge_lock_donggosanseong.png" class="slot-badge-img" alt="동고산성 잠김">
+      <div class="badge-slot-name">동고산성</div>
+      <div class="badge-slot-status">🔒 미개방 (터치해설)</div>
+    </div>
+
+    <div class="badge-slot" data-spot-info="🌌 [중바위] 승암산 정상(해발 307m)에 위치한 수호 바위이자 전망대로, 후백제 완산주 도읍과 오늘날 전주 한옥마을의 아름다운 야경을 한눈에 굽어살피는 역사적 명소입니다.">
+      <img src="assets/ui/badge_lock_jungbawi.png" class="slot-badge-img" alt="중바위 잠김">
+      <div class="badge-slot-name">중바위</div>
       <div class="badge-slot-status">🔒 미개방 (터치해설)</div>
     </div>
 
@@ -214,26 +220,20 @@ if (typeof THREE === 'undefined') {
       <div class="badge-slot-name">동고사</div>
       <div class="badge-slot-status">🔒 미개방 (터치해설)</div>
     </div>
-
-    <div class="badge-slot" data-spot-info="⛰️ [완산칠봉] 견훤 대왕이 완산주에 도읍을 정할 때 남쪽 방어선으로 삼았던 일곱 봉우리로, 전주(완산)라는 지명의 유래가 된 상징적인 산입니다.">
-      <img src="assets/ui/badge_lock_wansan.png" class="slot-badge-img" alt="완산칠봉 잠김">
-      <div class="badge-slot-name">완산칠봉</div>
-      <div class="badge-slot-status">🔒 미개방 (터치해설)</div>
-    </div>
   </div>
 
   <div class="char-stage-wrap" data-char-stage="inventory" style="flex-direction: row; gap: 10px; background: var(--cream-bg); border: 3px solid var(--wood-border); border-radius: 22px; padding: 10px 14px; width: 100%; max-width: 390px;">
     <img src="assets/char/char_5.png" class="char-img-3d" style="width: 72px; height: 72px;" alt="현무랑 미소">
     <div id="inv-history-desc" style="text-align: left; font-size: 12.5px; line-height: 1.5; color: var(--text-dark);">
       <b>💡 뱃지를 터치해보세요!</b><br>
-      동고산성·낙수정·동고사·완산칠봉에 담긴 견훤 대왕님의 후백제 역사를 현무랑이 설명해 드려요!
+      낙수정·동고산성·중바위·동고사에 담긴 견훤 대왕님의 후백제 역사를 현무랑이 설명해 드려요!
     </div>
   </div>
 </section>
 
 <div class="toast-msg" id="toast"></div>
 
-<!-- Modular Role-based Game Scripts -->
+<!-- Game Scripts -->
 <script src="js/audio.js"></script>
 <script src="js/sensor.js"></script>
 <script src="js/character3d.js"></script>

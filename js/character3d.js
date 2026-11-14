@@ -1,10 +1,9 @@
-/* ─────────────────────────────────────────────────────────────
-   2D UI HYEONMURANG STORYTELLER & HISTORICAL QUOTES
-   - 3D 과녁을 가리키던 3D 현무랑은 사용자의 요청으로 완전 제거 (과녁 조준 집중)
-   - 화살/인벤토리/로딩/로그인 화면의 2D UI 현무랑과 역사 해설 TMI 완벽 보존
-───────────────────────────────────────────────────────────── */
+/**
+ * UI Dialogue & Historical Narrative Manager
+ * Provides contextual dialogue quotes and interactive character animations.
+ */
 
-// 3D 씬에서 현무랑을 제거하되 기존 참조 에러를 방지하는 No-Op 더미 클래스
+// Fallback compatibility stub for 3D character group
 class ThreeHyeonmurang {
   constructor(scene) {
     this.group = new THREE.Group();
@@ -18,7 +17,7 @@ class ThreeHyeonmurang {
   }
 }
 
-/* ── 화면별 현무랑 터치 시 나오는 후백제·견훤 실제 역사 이야기 ── */
+// Historical dialogue lines per stage
 const CHAR_QUOTES = {
   login: [
     "안녕! 내 배에 적힌 임금 왕(王) 자 봤어? 후백제 왕도 완산주의 수호거북 현무랑이야!",
@@ -47,10 +46,10 @@ const CHAR_QUOTES = {
   ],
   result: [
     "우와아!! 견훤 대왕님이 보셨으면 당장 후백제 친위대 신궁으로 임명하셨을 거야!!",
-    "네가 획득한 동고산성 뱃지는 후백제 왕궁을 지키던 최후의 요새를 상징해!"
+    "네가 획득한 낙수정 뱃지는 후백제 군사들과 백성들의 갈증을 달래던 수호 명소를 상징해!"
   ],
   inventory: [
-    "동고산성(왕궁 산성), 동고사(견훤 창건 사찰), 낙수정(산성 아래 약수터), 완산칠봉(방어 진산) 4대 명소야!",
+    "낙수정(약수터), 동고산성(왕궁 산성), 중바위(전망 수호 바위), 동고사(견훤 창건 사찰) 4대 명소야!",
     "각 뱃지 카드를 터치하면 그 유적지에 담긴 견훤 대왕님의 숨은 역사를 알려줄게!"
   ]
 };
